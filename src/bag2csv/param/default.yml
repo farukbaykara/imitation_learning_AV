@@ -1,0 +1,5 @@
+image_topic: '/spinnaker_ros_driver_node/cam_fm_01/image_raw'
+image_output_path: '/home/bzeren/Desktop/bag-data-2/'
+delay_time: 0.7
+csv_output_path: '/farukbaykara/MST/'
+csv_file_name: 'data1.csv'
