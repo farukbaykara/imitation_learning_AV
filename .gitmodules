@@ -1,0 +1,9 @@
+[submodule "src/turtlebot3"]
+	path = src/turtlebot3
+	url = https://github.com/ROBOTIS-GIT/turtlebot3
+[submodule "src/turtlebot3_simulations"]
+	path = src/turtlebot3_simulations
+	url = https://github.com/ROBOTIS-GIT/turtlebot3_simulations
+[submodule "src/obstacle_detector"]
+	path = src/obstacle_detector
+	url = https://github.com/yangfuyuan/obstacle_detector
