@@ -1,16 +1,79 @@
-# This is a sample Python script.
+#! /usr/bin/env python3
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from TestModel import *
+from TrainingModel import *
+from utlis import *
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+class Car():
+    def init(self) -> None:
+        
+        self.img_path = rospy.get_param('~image_path')
+        self.image_folder_name = rospy.get_param('~image_folder_name')
+        self.model_name = rospy.get_param('~model_name')
+
+        
+        self.bridge = CvBridge()
+
+        self.raw_image = None
+
+
+        rospy.Subscriber(rospy.get_param('~image_topic'),Image,self.imageCallback,queue_size=1)
+        
+        self.cmdPublisher = rospy.Publisher('/imitator_cmd',VehicleCmd,queue_size=10)
+
+
+
+    def imageCallback(self,msg):
+        self.raw_image = self.bridge.imgmsg_to_cv2(msg)
+
+
+
+    def preProcess(self,img):
+        img = img[60:135,:,:]
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
+        img = cv2.GaussianBlur(img,  (3, 3), 0)
+        img = cv2.resize(img, (200, 66))
+        img = img/255
+        return img
+
+
+    def sendCommand(self,steering,speed):
+        cmdMsg = VehicleCmd()
+        cmdMsg.twist_cmd.twist.angular.z = steering
+        cmdMsg.twist_cmd.twist.linear.x = speed        
+        
+        self.cmdPublisher.publish(cmdMsg)
+
+
+
+    def testModel(self):
+        model = load_model(self.model_name)
+        image = np.asarray(self.raw_image)
+        image_processed = preProcess(image)
+        image_pixel_array = np.array(image_processed)
+        steering_cmd = float(model.predict(image_pixel_array))
+        speed_cmd = 5
+        self.sendCommand(steering_cmd,speed_cmd)
+
+
+
+
+
+def main():
+
+    rospy.init_node('imitator', anonymous=False)
+
+    imitator = Car()
+
+    rate = rospy.Rate(20)
+    while not rospy.is_shutdown():
+        imitator.testModel()
+        rate.sleep()
+
+
+if __name__=='main':
+
+    main()

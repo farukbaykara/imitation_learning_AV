@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import random
 
 import cv2
@@ -10,10 +12,20 @@ import matplotlib.image as mpimg
 from imgaug import augmenters as iaa
 import cv2
 import random
+import rospy
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+from autoware_msgs.msg import VehicleCmd
+
+
+
 
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Convolution2D, Flatten, Dense
 from tensorflow.python.keras.optimizers import adam_v2
+
+
+
 
 def getName(filePath):
     return os.path.basename(os.path.normpath(filePath))
@@ -62,13 +74,13 @@ def balanceData(data, display = True):
 
     return data
 
-def loadData(path, data):
+def loadData(path, data,image_folder_name):
     imagesPath = []
     steering = []
     for i in range(len(data)):
         indexedData = data.iloc[i]
         #print(indexedData)
-        imagesPath.append(os.path.join(path, 'IMG', indexedData[0]))
+        imagesPath.append(os.path.join(path, image_folder_name, indexedData[0]))
         steering.append(float(indexedData[3]))
     imagesPath = np.asarray(imagesPath)
     steering = np.asarray(steering)

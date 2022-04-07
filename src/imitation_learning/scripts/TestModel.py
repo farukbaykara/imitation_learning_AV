@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 print('Setting UP')
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -54,8 +56,24 @@ def sendControl(steering, throttle):
     })
 
 
+
+
+def testModel(model_name,raw_image):
+    model = load_model(model_name)
+    image = np.asarray(raw_image)
+    image_processed = preProcess(image)
+    image_pixel_array = np.array(image_processed)
+    steering_cmd = float(model.predict(image_pixel_array))
+    speed_cmd = 5
+
+
+
+
+
+
 if __name__ == '__main__':
     model = load_model('model.h5')
     app = socketio.Middleware(sio, app)
     ### LISTEN TO PORT 4567
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+    
