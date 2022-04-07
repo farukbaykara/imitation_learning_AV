@@ -31,7 +31,7 @@
   </node> 
 
   <node pkg="obstacle_detector" type="obstacle_detector" name="obstacle_detector" output="screen">
-    <param name="world_frame"     type="string" value="world"/>
+    <param name="world_frame"     type="string" value="map"/>
     <param name="scanner_frame"   type="string" value="scanner"/>
  
     <param name="use_scan"            type="bool" value="true"/>
@@ -60,4 +60,3 @@
   
   <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find obstacle_detector)/resources/obstacle_detector.rviz"/>
 </launch>
-
