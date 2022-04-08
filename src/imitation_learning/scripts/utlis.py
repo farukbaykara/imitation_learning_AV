@@ -74,13 +74,13 @@ def balanceData(data, display = True):
 
     return data
 
-def loadData(path, data,image_folder_name):
+def loadData(path, data):
     imagesPath = []
     steering = []
     for i in range(len(data)):
         indexedData = data.iloc[i]
         #print(indexedData)
-        imagesPath.append(os.path.join(path, image_folder_name, indexedData[0]))
+        imagesPath.append(os.path.join(path, 'IMG', indexedData[0]))
         steering.append(float(indexedData[3]))
     imagesPath = np.asarray(imagesPath)
     steering = np.asarray(steering)

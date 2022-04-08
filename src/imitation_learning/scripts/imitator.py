@@ -8,6 +8,7 @@ from utlis import *
 
 
 class Car():
+    
     def init(self) -> None:
         
         self.img_path = rospy.get_param('~image_path')
@@ -57,8 +58,6 @@ class Car():
         steering_cmd = float(model.predict(image_pixel_array))
         speed_cmd = 5
         self.sendCommand(steering_cmd,speed_cmd)
-
-
 
 
 
