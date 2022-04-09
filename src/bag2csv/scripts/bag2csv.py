@@ -1,111 +1,101 @@
 #! /usr/bin/env python3
 
-from curses.ascii import CAN
-from tkinter.messagebox import NO
+from io import StringIO
+import string
+from tokenize import String
 import cv2
-
-import rospy
-from sensor_msgs.msg import Image, PointCloud2
+from sympy import Float
 from cv_bridge import CvBridge
-import message_filters
-import time
 from sensor_msgs.msg import Image
+import rospy
+import time
+import message_filters
 from lgsvl_msgs.msg import CanBusData
 import csv
+import pandas as pd
+from pathlib import Path
+import os
 
 
-
-
-
-class DataPicker():
-    def init(self) -> None:
+class Main():
+    def __init__(self):
         
         self.counter = 0
-        self.raw_canbus = CanBusData()
-        self.raw_steering = CanBusData().steer_pct
-        
-        
-        self.raw_canbus = None
-        self.raw_image = None
-        self.raw_steering = None
         self.cv_image = None
-    
-        
-
-
-        self.image_topic = rospy.get_param('~image_topic')
-        self.image_output_path = rospy.get_param('~image_output_path')
-        self.canbus_topic = rospy.get_param('~canbus_topic')
-        self.csv_output_path = rospy.get_param('~csv_output_path')
-        self.csv_file_name = rospy.get_param('~csv_file_name')
-
+        self.raw_canbus = CanBusData()
+        self.raw_canbus = None
+        self.csv_name = rospy.get_param('~csv_name')
+        self.csv_dir = rospy.get_param('~csv_dir')
+        self.csv_full_path = self.csv_dir+self.csv_name
+        self.bagfile_name = rospy.get_param('~bagfile_name')
+        self.camera_topic = rospy.get_param('~camera_topic')
+        self.CanBus_topic = rospy.get_param('~CanBus_topic')
+        self.add_or_new = rospy.get_param('~add_or_new')
         
         self.bridge = CvBridge()
 
-        self.raw_image_topic = message_filters.Subscriber(self.image_topic, Image)
+
+        
 
 
-        self.raw_canbus_topic = message_filters.Subscriber(self.canbus_topic,CanBusData)
+        if self.add_or_new=='new':
+            column_data = pd.DataFrame(columns=['Image','Steering'])
+            column_data.to_csv(self.csv_full_path, mode='a', index = False)
+
+        self.raw_image_topic = message_filters.Subscriber(self.camera_topic, Image)
+
+
+        self.raw_canbus_topic = message_filters.Subscriber(self.CanBus_topic,CanBusData)
 
 
         timeSynchronizer = message_filters.ApproximateTimeSynchronizer([self.raw_image_topic, self.raw_canbus_topic], queue_size=10, slop=0.1, allow_headerless=True)
         timeSynchronizer.registerCallback(self.callback)
+        rospy.loginfo("I will publish to the topic %s", str('node basladi'))
 
     def callback(self, raw_image, raw_canbus):
 
         self.raw_image = raw_image
-        self.raw_steering = raw_canbus
+        self.raw_canbus = raw_canbus
 
-        print(self.raw_steering)
+        self.cv_image = self.bridge.imgmsg_to_cv2(self.raw_image,desired_encoding="")
+    
+    def save_data(self):
         
-        self.cv_image = self.bridge.imgmsg_to_cv2(raw_image,desired_encoding="")
-
-
-    def pick_data(self):
-
-        if self.raw_image is None or self.raw_steering is None:
-            print('Not picked----------------------')
+        if self.cv_image is None or self.raw_canbus is None:
             return
-
-        if self.cv_image is None:
-            return
-
-        print('Data picked---------------------'+str(self.counter))
         
+        print('-------------------'+str(self.counter))
+        image_path = rospy.get_param('~image_output_path')+self.bagfile_name+'_'+str(self.counter).zfill(7)+'.jpg'
         
-        image_path_name = self.image_output_path + 'data' + str(self.counter).zfill(7)+'.jpg'
-
-        cv2.imwrite(image_path_name, img=self.cv_image)
+        cv2.imwrite(image_path, img=self.cv_image)
         self.counter+=1
 
-
-
-        data = [image_path_name,self.raw_steering]
-
-        with open(self.csv_output_path+self.csv_file_name,'w',encoding='UTF8',newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(data)
+        
+        
+        data = pd.DataFrame([[image_path , self.raw_canbus.steer_pct]], columns=['Image','Steering'])
+        #data['Steering'] = data['Steering'].astype(str)
+#Çalıştı, csv ye ek olarak ekleniyor ama resimler üzerine yazıyor. 
+        data.to_csv(self.csv_full_path, mode='a', header = False,index = False) 
 
 
 
         
-        
-        self.raw_image = None
-        self.raw_steering = None
+        self.raw_canbus = None
         self.cv_image = None
-
 
 def main():
 
-    rospy.init_node('data_picker', anonymous=False)
+    rospy.init_node("bag2csv", anonymous=False)
 
-    data_picker = DataPicker()
+    rospy.loginfo('PLEASE, PLAY SOME BAG FILE')
 
+    main_o = Main()
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        data_picker.pick_data()
+        
+        main_o.save_data()
         rate.sleep()
 
-if __name__=='main':
+if __name__ == '__main__':
 
     main()

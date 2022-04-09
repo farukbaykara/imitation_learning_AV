@@ -1,4 +1,4 @@
-image_path: 'home/baykara/MST/IMG'
+image_path: 'home/baykara/MST/IMG/'
 image_folder_name: 'IMG'
 model_name: 'model.h5'
 image_topic: '/spinnaker_ros_driver_node/cam_fm_01/image_raw'

@@ -6,12 +6,12 @@ from sklearn.model_selection import train_test_split
 
 #########1
 
-path = 'myData'
-data = importDataInfo(path)
+path = '/home/aesk/baykara_ws/myData/'
+data, data_steer = importDataInfo(path)
 
 #########2
 
-data = balanceData(data, display=True)
+data = balanceData(data, data_steer, display=True)
 
 #########3
 

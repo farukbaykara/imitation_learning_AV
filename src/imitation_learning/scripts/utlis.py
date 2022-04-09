@@ -31,20 +31,28 @@ def getName(filePath):
     return os.path.basename(os.path.normpath(filePath))
 
 def importDataInfo(path):
-    coloums = ['Center', 'Left', 'Right', 'Steering', 'Throttle', 'Break', 'Speed']
+    coloums = ['Image','Steering']
     data = pd.read_csv(os.path.join(path, 'driving_log.csv'), names = coloums)
     #print(data.head())
     #print(data['Center'][0])
     #print(getName(data['Center'][0]))
-    data['Center'] = data['Center'].apply(getName)
-    #print(data.head())
+    data['Image'] = data['Image'].apply(getName)
+    data_steer = data['Steering'].to_numpy()
+    data_steer = np.delete(data_steer, 0) #steering header deleted from first row.
+    data_steer = data_steer.astype('float64')
+    print(type(data_steer))
     print('Total Images Imported:', data.shape[0])
-    return data
+    print('ananananananannananana',data_steer)
+    print('--------------------',data)
 
-def balanceData(data, display = True):
+    return data, data_steer
+
+def balanceData(data, data_steer, display = True):
     nBins = 31
-    samplesPerBin = 1000
-    hist, bins = np.histogram(data['Steering'],nBins)
+    samplesPerBin = 110
+    data_steer_temp = data_steer
+    # print(type(data['Steering']))
+    hist, bins = np.histogram(data_steer,nBins)
     #print(bins)
     if display:
         center = (bins[:-1] + bins[1:]) * 0.5
@@ -54,10 +62,12 @@ def balanceData(data, display = True):
         plt.show()
 
     removeIndexList = []
+    print(type(bins))
+    print(type(data_steer_temp))
     for j in range(nBins):
         binDataList = []
-        for i in range(len(data['Steering'])):
-            if data['Steering'][i] >= bins[j] and data['Steering'][i] <= bins[j + 1]:
+        for i in range(len(data_steer_temp)):
+            if data_steer_temp[i] >= bins[j] and data_steer_temp[i] <= bins[j + 1]:
                 binDataList.append(i)
         binDataList = shuffle(binDataList)
         binDataList = binDataList[samplesPerBin:]
@@ -67,7 +77,7 @@ def balanceData(data, display = True):
     print('Remaining Images: ', len(data))
 
     if display:
-        hist, _ = np.histogram(data['Steering'],nBins)
+        hist, _ = np.histogram(data_steer_temp,nBins)
         plt.bar(center, hist, width = 0.06)
         plt.plot((-1, 1), (samplesPerBin, samplesPerBin))
         plt.show()
@@ -81,7 +91,7 @@ def loadData(path, data):
         indexedData = data.iloc[i]
         #print(indexedData)
         imagesPath.append(os.path.join(path, 'IMG', indexedData[0]))
-        steering.append(float(indexedData[3]))
+        steering.append(float(indexedData[1]))
     imagesPath = np.asarray(imagesPath)
     steering = np.asarray(steering)
     return imagesPath, steering
