@@ -1,5 +1,7 @@
 <launch>
 
+
+
     <node pkg="bag2csv" type="bag2csv.py" name="bag2csv">
         <rosparam command="load" file="$(find bag2csv)/config/default.yml" />
     </node>

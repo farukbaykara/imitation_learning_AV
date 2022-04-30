@@ -1,7 +1,7 @@
 image_output_path: '/home/aesk/baykara_ws/myData/IMG/'
 csv_dir: '/home/aesk/baykara_ws/myData/'
 csv_name: 'driving_log.csv'
-bagfile_name: '2022-04-08-22-45-45' #without .bag
+bagfile_name: 'sag5' 
 camera_topic: '/camera'
 CanBus_topic: '/CanBusData'
-add_or_new: 'new'
+add_or_new: 'add'

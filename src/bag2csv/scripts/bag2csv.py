@@ -74,7 +74,7 @@ class Main():
         
         data = pd.DataFrame([[image_path , self.raw_canbus.steer_pct]], columns=['Image','Steering'])
         #data['Steering'] = data['Steering'].astype(str)
-#Çalıştı, csv ye ek olarak ekleniyor ama resimler üzerine yazıyor. 
+        #Çalıştı, csv ye ek olarak ekleniyor ama resimler üzerine yazıyor. 
         data.to_csv(self.csv_full_path, mode='a', header = False,index = False) 
 
 

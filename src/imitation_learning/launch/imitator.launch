@@ -1,6 +1,6 @@
 <launch>
 
-    <node pkg="imitation_learning" type="imitator.py" name="imitator">
+    <node pkg="imitation_learning" type="imitator.py" name="imitator" output="screen">
         <rosparam command="load" file="$(find imitation_learning)/param/imitator.yaml" />
     </node>
     

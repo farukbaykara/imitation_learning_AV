@@ -16,6 +16,14 @@ import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from autoware_msgs.msg import VehicleCmd
+import numpy as np
+
+
+import base64
+from io import BytesIO
+import PIL
+import cv2
+import tensorflow as tf
 
 
 
@@ -40,7 +48,7 @@ def importDataInfo(path):
     data_steer = data['Steering'].to_numpy()
     data_steer = np.delete(data_steer, 0) #steering header deleted from first row.
     data_steer = data_steer.astype('float64')
-    print(type(data_steer))
+
     print('Total Images Imported:', data.shape[0])
     print('ananananananannananana',data_steer)
     print('--------------------',data)
@@ -62,8 +70,7 @@ def balanceData(data, data_steer, display = True):
         plt.show()
 
     removeIndexList = []
-    print(type(bins))
-    print(type(data_steer_temp))
+
     for j in range(nBins):
         binDataList = []
         for i in range(len(data_steer_temp)):
@@ -74,14 +81,23 @@ def balanceData(data, data_steer, display = True):
         removeIndexList.extend(binDataList)
     print('Removed Images: ', len(removeIndexList))
     data.drop(data.index[removeIndexList], inplace = True)
+    
+    #deleting first row, 'Steering' header cannot convert to float
+    data.drop(data.index[0], inplace = True) 
+    
+    
     print('Remaining Images: ', len(data))
-
+    print('-----------------------')
+    print(data)
     if display:
         hist, _ = np.histogram(data_steer_temp,nBins)
         plt.bar(center, hist, width = 0.06)
         plt.plot((-1, 1), (samplesPerBin, samplesPerBin))
         plt.show()
 
+    # data_steer = data['Steering'].to_numpy()
+    # data_steer = data_steer.astype('float64')
+    # print(type(data_steer))
     return data
 
 def loadData(path, data):
@@ -134,9 +150,14 @@ def augmentImage(imgPath,steering):
     return img, steering
 
 def preProcessing(img):
-    img = img[60:135, :, :]
+    # cv2.imshow('aaa',img)
+    # cv2.waitKey(0)
+    img = img[640:840, :, :]
+    # cv2.imshow('aaa',img)
+    # cv2.waitKey(0)
     img =cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
     img = cv2.GaussianBlur(img, (3,3), 0)
+
     img =cv2.resize(img, (200, 66))
     img = img / 255
     return img

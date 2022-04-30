@@ -1,0 +1,15 @@
+<launch>
+
+    <node name="republish" type="republish" pkg="image_transport" output="screen" 
+        args="compressed in:=/camera raw out:=/camera" />
+
+
+    <node pkg="rosbag" type="record" name="rosbag_record_cam"
+        args="record /camera /CanBusData" />
+
+    <!-- <node pkg="rosbag" type="record" name="rosbag_record_can"
+        args="record -o /CanBusData" /> -->
+
+
+
+</launch>

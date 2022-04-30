@@ -1,0 +1,67 @@
+<launch>
+
+
+    <param name="/use_sim_time" value="false" />
+  
+    <node pkg="aesk_kalman" type="odom_trans_node" name="odom_trans_node" output="screen"></node>
+  
+      
+    <node pkg="aesk_kalman" type="tf_Odom" name="tf_Odom" output = "screen"></node>
+
+    <node pkg="tf" type="static_transform_publisher" name="gps_tf" args="0 0 0 0 0 0 1 imu gps 100"></node>
+
+    <!-- <node pkg="tf" type="static_transform_publisher" name="imu_tf" args="-1.0510799 0 -1.96 0 0 0 1 velodyne imu 100"></node> -->
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find aesk_kalman)/rviz/aesk_kalman_rviz.rviz" />
+  
+  
+    <include file="$(find nmea2fix)/launch/nmea2fix.launch"/>
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_odom" clear_params="true">
+      <rosparam command="load" file="$(find aesk_kalman)/params/ekf_node_odom.yaml" />
+      
+      
+  
+      <remap from="odometry/filtered" to="odometry/odom_filtered" />
+      <remap from="accel/filtered" to="accel/accel_filtered" />
+  
+  
+    </node>
+  
+  
+    <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_map" clear_params="true">
+      <rosparam command="load" file="$(find aesk_kalman)/params/ekf_node_map.yaml" />
+      
+  
+      <remap from="odometry/filtered" to="odometry/map_filtered" />
+  
+  
+    </node>
+  
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" output="screen">
+      
+      <rosparam command="load" file="$(find aesk_kalman)/params/ekf_navsat_node.yaml" />
+      
+      
+      
+      
+      <remap from="/imu/data" to="/imu_raw" />
+      <remap from="/gps/fix" to="/gps/fix" />
+      <remap from="/odometry/filtered" to="/odometry/odom_filtered" />
+    </node>
+
+    <!-- <rosparam command="load" file="$(find aesk_kalman)/params/dual_ekf_node.yaml" />
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_odom" clear_params="true"/>
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_map" clear_params="true">
+      <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+  
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true">
+      <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+   -->
+  
+  </launch> 

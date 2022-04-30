@@ -1,15 +1,15 @@
 #! /usr/bin/env python3
 
 from TestModel import *
-from TrainingModel import *
-from utlis import *
 
+from utlis import *
+from tensorflow.python.keras.models import load_model
 
 
 
 class Car():
     
-    def init(self) -> None:
+    def __init__(self):
         
         self.img_path = rospy.get_param('~image_path')
         self.image_folder_name = rospy.get_param('~image_folder_name')
@@ -33,7 +33,7 @@ class Car():
 
 
     def preProcess(self,img):
-        img = img[60:135,:,:]
+        img = img[640:840, :, :]
         img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
         img = cv2.GaussianBlur(img,  (3, 3), 0)
         img = cv2.resize(img, (200, 66))
@@ -51,13 +51,16 @@ class Car():
 
 
     def testModel(self):
+        print('teste girdi')
+        print(self.model_name)
         model = load_model(self.model_name)
         image = np.asarray(self.raw_image)
-        image_processed = preProcess(image)
+        image_processed = self.preProcess(image)
         image_pixel_array = np.array(image_processed)
         steering_cmd = float(model.predict(image_pixel_array))
         speed_cmd = 5
         self.sendCommand(steering_cmd,speed_cmd)
+        
 
 
 
@@ -71,8 +74,9 @@ def main():
     while not rospy.is_shutdown():
         imitator.testModel()
         rate.sleep()
+        
 
 
-if __name__=='main':
+if __name__=='__main__':
 
     main()
