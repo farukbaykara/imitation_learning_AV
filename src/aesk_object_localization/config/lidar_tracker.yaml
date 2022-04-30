@@ -1,0 +1,9 @@
+cloud_topic: "/roi_filter/cloud"
+sign_detections_topic: "/sign_finder/detections"
+object_count: 3
+tracker_ares_bounds:
+  { "xmin": -2, "ymin": -10, "zmin": -10, "xmax": 30, "ymax": 10, "zmax": 10 }
+
+                      # x->z                z->x
+tracker_gate_extent: { "x": 1.1, "y": 1.8, "z": 1.8 }
+tracker_gate_margin: { "x": 0.3, "y": 0, "z": 0 }

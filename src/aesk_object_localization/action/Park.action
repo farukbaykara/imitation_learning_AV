@@ -1,0 +1,8 @@
+#goal definition
+sensor_msgs/PointCloud2 cloud
+---
+#result definition
+geometry_msgs/Point point
+---
+#feedback definition
+sensor_msgs/PointCloud2 cloud_feedback

@@ -1,0 +1,149 @@
+<launch>
+
+    <!-- Lidar - Camera Extrinsic Parameters -->
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_velodyne_to_camera"
+          args="0 0 -0.2 -1.57 0.01 -1.57 velodyne camera_front 100" />
+
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_velodyne_to_camera_left"
+          args="0 0 -0.2 -0.819 0 -1.57  velodyne camera_left 100" />
+
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_velodyne_to_camera_right"
+          args="0 0 -0.2 -2.322 0 -1.57  velodyne camera_right 100" />
+
+    <!-- Undistort Raw Camera Image -->
+<!--     <node pkg="aesk_camera_driver" type="camera_driver" name="camera_driver"> -->
+<!--             <rosparam command="load" file="$(find aesk_camera_driver)/config/ost.yaml" /> -->
+<!--     </node> -->
+
+    <!-- Convert CompressedImage to RawImage -->
+    <!-- <node name="republish"
+              type="republish"
+              pkg="image_transport"
+              output="screen"
+              args="compressed in:=/camera/front raw out:=/camera/front" />
+
+   <node name="republish_left"
+             type="republish"
+             pkg="image_transport"
+             output="screen"
+             args="compressed in:=/camera/left raw out:=/camera/left" />
+
+   <node name="republish_right"
+            type="republish"
+            pkg="image_transport"
+            output="screen"
+            args="compressed in:=/camera/right raw out:=/camera/right" /> -->
+
+<!--     <node name="republish2" -->
+<!--                   type="republish" -->
+<!--                   pkg="image_transport" -->
+<!--                   output="screen" -->
+<!--                   args="compressed in:=/camera/right raw out:=/camera/right" /> -->
+
+    <!-- Launch roi_filter Node -->
+    <node pkg="aesk_object_localization" type="roi_filter" name="roi_filter">
+        <rosparam command="load" file="$(find aesk_object_localization)/config/roi_filter.yaml" />
+    </node>
+
+    <!-- Project Point Cloud Into Image -->
+    <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter">
+        <rosparam command="load" file="$(find aesk_object_localization)/config/default.yaml" />
+        <param name="camera_frame_id" value="camera_front" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter_left">
+        <rosparam command="load" file="$(find aesk_object_localization)/config/default.yaml" />
+        <param name="camera_frame_id" value="camera_left" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter_right">
+        <rosparam command="load" file="$(find aesk_object_localization)/config/default.yaml" />
+        <param name="camera_frame_id" value="camera_right" />
+    </node>
+
+<!--     <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter2"> -->
+<!--         <rosparam command="load" file="$(find aesk_object_localization)/config/default.yaml" /> -->
+<!--         <param name="image_topic" value="/camera/right" /> -->
+<!--     </node> -->
+
+    <!-- Convert darknet_ros_msgs to vision_msgs. -->
+    <node pkg="aesk_darknet_republish" type="darknet_republish" name="darknet_republish" >
+            <rosparam command="load" file="$(find aesk_darknet_republish)/config/default.yaml" />
+    </node>
+
+    <!-- Estimate depth of camera points with lidar -->
+    <node pkg="aesk_object_localization" type="camera_depth_estimator" name="camera_depth_estimator_left" >
+        <param name="projected_cloud_topic" value="/cloud_painter_left/cloud_projected" />
+        <param name="lane_cloud_topic" value="/lane2d_1" />
+        <param name="search_radius" value="1.0" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="camera_depth_estimator" name="camera_depth_estimator_right" >
+        <param name="projected_cloud_topic" value="/cloud_painter_right/cloud_projected" />
+        <param name="lane_cloud_topic" value="/lane2d_2" />
+        <param name="search_radius" value="1.0" />
+    </node>
+
+    <!-- Visualize projected cloud -->
+    <node pkg="aesk_visualization" type="projected_cloud_viz" name="projected_cloud_viz" >
+        <param name="image_topic" value="/camera/front" />
+        <param name="projected_cloud_topic" value="/cloud_painter/cloud_projected" />
+        <param name="lane_cloud_topic" value="/lane_3d" />
+        <param name="bboxes_topic" value="/darknet_republish/vision_boxes" />
+        <!-- <param name="bboxes_topic" value="/yolov5/BoundingBoxes" /> -->
+    </node>
+
+    <node pkg="aesk_visualization" type="projected_cloud_viz" name="projected_cloud_viz_left" >
+        <param name="image_topic" value="/camera/left" />
+        <param name="projected_cloud_topic" value="/cloud_painter_left/cloud_projected" />
+        <param name="lane_cloud_topic" value="/camera_depth_estimator_left/lane_3d" />
+        <!-- <param name="bboxes_topic" value="/darknet_republish/vision_boxes" /> -->
+        <param name="bboxes_topic" value="/yolov5/BoundingBoxes" />
+    </node>
+
+    <node pkg="aesk_visualization" type="projected_cloud_viz" name="projected_cloud_viz_right" >
+        <param name="image_topic" value="/camera/right" />
+        <param name="projected_cloud_topic" value="/cloud_painter_right/cloud_projected" />
+        <param name="lane_cloud_topic" value="/camera_depth_estimator_right/lane_3d" />
+        <!-- <param name="bboxes_topic" value="/darknet_republish/vision_boxes" /> -->
+        <param name="bboxes_topic" value="/yolov5/BoundingBoxes" />
+    </node>
+
+    <!-- Find objects in 3D point cloud. -->
+    <node pkg="aesk_object_localization" type="lidar_cluster" name="lidar_cluster" >
+        <rosparam command="load" file="$(find aesk_object_localization)/config/lidar_cluster.yaml" />
+    </node>
+
+    <!-- Visualize 3D detections. -->
+    <node pkg="aesk_visualization" type="detection_3d_viz" name="detection_3d_viz" output="screen">
+        <param name="detection_3d_topic" value="/lidar_cluster/detections" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="sign_finder" name="sign_finder" >
+            <rosparam command="load" file="$(find aesk_object_localization)/config/sign_finder.yaml" />
+    </node>
+
+    <node pkg="aesk_visualization" type="detection_3d_viz" name="signs_3d_viz" >
+            <param name="detection_3d_topic" value="/sign_finder/detections" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="lidar_tracker" name="lidar_tracker" output="screen" >
+            <rosparam command="load" file="$(find aesk_object_localization)/config/lidar_tracker.yaml" />
+    </node>
+
+    <node pkg="aesk_visualization" type="detection_3d_viz" name="signs_3d_viz_tracked" >
+            <param name="detection_3d_topic" value="/lidar_tracker/tracked_detections" />
+    </node>
+
+    <node pkg="aesk_visualization" type="detection_3d_viz" name="signs_3d_viz_gate" >
+            <param name="detection_3d_topic" value="/lidar_tracker/gates" />
+    </node>
+
+    <node pkg="aesk_object_localization" type="lane3d_combiner" name="lane3d_combiner" output="screen" >
+            <rosparam command="load" file="$(find aesk_object_localization)/config/lane3d_combiner.yaml" />
+    </node>
+
+</launch>

@@ -1,0 +1,21 @@
+<launch>
+    <!-- /////////////// TF \\\\\\\\\\\\\\\ -->
+    <!-- <node pkg="aesk_navigation" type="clock_signal.py" name="clock">
+    </node>
+    <node pkg="aesk_navigation" type="tf2Odom" name="tf2Odom">
+    </node> -->
+
+    <!-- /////////////// SWERVE \\\\\\\\\\\\\\\ -->
+    <node pkg="aesk_swerve" type="bezier_swerve_main" name="bezier_swerve" output="screen">
+            <rosparam command="load" file="$(find aesk_swerve)/config/bezier_swerve.yaml" />
+    </node>
+
+    <!-- /////////////// ACTION SERVER \\\\\\\\\\\\\\\ -->
+    <node pkg="aesk_swerve" type="action_server.py" name="action_server" output="screen"> 
+    </node>
+
+    <!-- /////////////// RVIZ \\\\\\\\\\\\\\\ -->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find aesk_swerve)/rviz/swerve.rviz" /> 
+
+
+</launch>

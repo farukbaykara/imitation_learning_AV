@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="aesk_darknet_republish" type="darknet_republish" name="darknet_republish" output="screen" >
+        <rosparam command="load" file="$(find aesk_darknet_republish)/config/default.yaml" />
+    </node>
+
+</launch>

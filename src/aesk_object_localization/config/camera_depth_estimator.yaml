@@ -1,0 +1,4 @@
+projected_cloud_topic: "/cloud_painter/cloud_projected"
+#lane_cloud_topic: "/lane_image_pc2"
+lane_cloud_topic: "/lanenet_pc2"
+search_radius: 1.0

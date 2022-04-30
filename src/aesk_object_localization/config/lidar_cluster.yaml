@@ -1,0 +1,6 @@
+lidar_topic: "/roi_filter/cloud"
+
+dbscan:
+  eps: 1
+  min_points: 20
+

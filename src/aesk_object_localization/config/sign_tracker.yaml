@@ -1,0 +1,18 @@
+object_count: 7
+cloud_topic: "/velodyne_points"
+sign_markers_topic: "/sign_markers"
+tracker_box: {"x_min": 0.8, "x_max": 0.6, "y_min": 0.6, "y_max": 0.6, "z_min": 0.3, "z_max": 0.3}
+sign_drop_x: -0.5
+park_id: 13
+no_park_id: 12
+red_sign_id: 15
+yellow_sign_id: 16
+green_sign_id: 17
+distance: 15
+no_red_light_topic: "/no_red_light"
+finish: "/finish_line"
+ignore_signs: [25]
+light_count: 3
+sign_stop_topic: "/sign_stop"
+station_sign_id: 14
+autonomous_topic: "/autonomous_mode"

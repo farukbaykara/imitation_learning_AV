@@ -1,0 +1,33 @@
+<launch>
+
+  <!-- Lidar - Camera Extrinsic Parameters -->
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_cam_to_sim"
+          args="0 0 0 0 0 0 front_center_custom_body cam_fm_01 100" />
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_velodyne_sim"
+          args="0 0 0 0 0 0 car_1/LidarCustom velodyne 100" />
+
+    <!-- Undistort Raw Camera Image -->
+    <node pkg="aesk_camera_driver" type="camera_driver" name="camera_driver">
+        <rosparam command="load" file="$(find aesk_camera_driver)/config/default_airsim.yaml" />
+    </node>
+
+    <!-- Project Point Cloud Into Image -->
+    <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter">
+        <rosparam command="load" file="$(find aesk_object_localization)/config/default_airsim.yaml" />
+    </node>
+
+    <!-- Estimate depth of camera points with lidar -->
+    <node pkg="aesk_object_localization" type="camera_depth_estimator" name="camera_depth_estimator" output="screen" >
+        <rosparam command="load" file="$(find aesk_object_localization)/config/camera_depth_estimator.yaml" />
+    </node>
+
+    <!-- Visualize projected cloud -->
+    <node pkg="aesk_visualization" type="projected_cloud_viz" name="projected_cloud_viz" output="screen" >
+        <param name="image_topic" value="/camera_driver/image_undistorted" />
+        <param name="projected_cloud_topic" value="/cloud_painter/cloud_projected" />
+        <param name="lane_cloud_topic" value="/lane_3d" />
+    </node>
+  
+</launch>     

@@ -1,0 +1,8 @@
+lidar_topic: "/points_raw"
+
+roi_bounds:
+  { "xmin": -10, "ymin": -10, "zmin": -1, "xmax": 20, "ymax": 10, "zmax": 10 }
+
+voxel_downsample:
+  use: false
+  voxel_size: 0.2

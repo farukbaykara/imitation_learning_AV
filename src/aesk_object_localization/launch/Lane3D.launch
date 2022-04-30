@@ -1,0 +1,38 @@
+<launch>
+
+    <!-- Lidar - Camera Extrinsic Parameters -->
+    <node pkg="tf" type="static_transform_publisher"
+          name="transformation_velodyne_to_camera"
+          args="0 0 -0.2 -1.57 0.01 -1.57 velodyne cam_fm_01 100" />
+
+    <!-- Undistort Raw Camera Image -->
+<!--     <node pkg="aesk_camera_driver" type="camera_driver" name="camera_driver"> -->
+<!--             <rosparam command="load" file="$(find aesk_camera_driver)/config/default.yaml" /> -->
+<!--     </node> -->
+
+    <!-- Convert CompressedImage to RawImage -->
+    <node name="republish"
+              type="republish"
+              pkg="image_transport"
+              output="screen"
+              args="compressed in:=/camera raw out:=/camera" />
+
+    <!-- Project Point Cloud Into Image -->
+    <node pkg="aesk_object_localization" type="cloud_painter" name="cloud_painter" output="screen" >
+        <rosparam command="load" file="$(find aesk_object_localization)/config/default.yaml" />
+    </node>
+
+    <!-- Estimate depth of camera points with lidar -->
+    <node pkg="aesk_object_localization" type="camera_depth_estimator" name="camera_depth_estimator" output="screen" >
+        <rosparam command="load" file="$(find aesk_object_localization)/config/camera_depth_estimator.yaml" />
+    </node>
+
+    <!-- Visualize projected cloud -->
+    <node pkg="aesk_visualization" type="projected_cloud_viz" name="projected_cloud_viz" >
+        <param name="image_topic" value="/camera" />
+        <param name="projected_cloud_topic" value="/cloud_painter/cloud_projected" />
+        <param name="lane_cloud_topic" value="/lane_3d" />
+        <param name="bboxes_topic" value="/darknet_republish/vision_boxes" />
+    </node>
+
+</launch>

@@ -1,0 +1,7 @@
+lidar_topic: "/cloud_painter/cloud_projected"
+yolo_topic: "/darknet_ros/bounding_boxes"
+
+extended_x_min: 0
+extended_x_max: 0
+extended_y_min: 0
+extended_y_max: 0

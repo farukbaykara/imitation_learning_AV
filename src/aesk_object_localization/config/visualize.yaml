@@ -1,0 +1,6 @@
+image_rect_topic: "/camera_driver/image_undistorted"
+cloud_projected_topic: "/cloud_painter/cloud_projected"
+cloud_filtered_topic: "/cloud_filter/filtered_clouds"
+# cloud_filtered_topic: "/cloud_painter/filtered_clouds"
+
+yolo_topic: "/darknet_ros/bounding_boxes"

@@ -1,0 +1,6 @@
+park_id: 13
+object_count: 5
+finish: "/finish_line"
+cloud_topic: "/cloud_painter/cloud_projected"
+sign_markers_topic: "/sign_markers"
+tracker_box: {"x_min": 0.8, "x_max": 0.6, "y_min": 0.6, "y_max": 0.6, "z_min": 0.3, "z_max": 0.3}

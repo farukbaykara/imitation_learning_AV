@@ -1,0 +1,14 @@
+lidar_topic: "/airsim_node/car_1/lidar/LidarCustom"
+camera_topic: "/airsim_node/car_1/front_center_custom/Scene"
+yolo_topic: "/darknet_ros/bounding_boxes"
+
+intrinsic_parameters: [1332.8958740234375, 0.0, 320.0, 0.0, 1332.8958740234375, 240.0, 0.0, 0.0, 1.0]
+distortion_coefficients: [-0.294977, 0.064122, -0.000527, -0.000041, 0.000000]
+
+image_width: 640 
+image_height: 480
+
+roi: {"x_min": -1, "x_max": 25, "y_min": -7, "y_max": 7, "z_min": -5, "z_max": 100}
+roi_finish: {"x_min": 1.7, "x_max": 25, "y_min": -10, "y_max": 10, "z_min": -5, "z_max": 10}
+
+finish: "/finish_line"

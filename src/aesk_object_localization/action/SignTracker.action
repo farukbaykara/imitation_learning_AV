@@ -1,0 +1,8 @@
+#goal definition
+PointCloud2WithId[] clouds
+---
+#result definition
+visualization_msgs/MarkerArray markers
+---
+#feedback definition
+sensor_msgs/PointCloud2 cloud_feedback
