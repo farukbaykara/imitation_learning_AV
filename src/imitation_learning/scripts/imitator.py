@@ -23,7 +23,7 @@ class Car():
 
         rospy.Subscriber(rospy.get_param('~image_topic'),Image,self.imageCallback,queue_size=1)
         
-        self.cmdPublisher = rospy.Publisher('/imitator_cmd',VehicleCmd,queue_size=10)
+        self.cmdPublisher = rospy.Publisher('/vehicle_cmd',VehicleCmd,queue_size=10)
 
 
 
@@ -54,9 +54,13 @@ class Car():
         print('teste girdi')
         print(self.model_name)
         model = load_model(self.model_name)
+        print('model upload ok')
         image = np.asarray(self.raw_image)
+        print('raw image shape: %d',image.shape)
         image_processed = self.preProcess(image)
-        image_pixel_array = np.array(image_processed)
+        print('processed image shape: %d',image_processed.shape)
+        image_pixel_array = np.array([image_processed])
+        print('image pixel array shape: %d',image_pixel_array.shape)
         steering_cmd = float(model.predict(image_pixel_array))
         speed_cmd = 5
         self.sendCommand(steering_cmd,speed_cmd)

@@ -109,7 +109,7 @@ void Swerve::obstacleCallback(const lgsvl_msgs::Detection3DArray& t_Obstacle)
 
     if (!m_init)
     {
-        m_current_pose = t_Obstacle.detections[0].bbox.position;
+        m_current_pose = t_Obstacle.detections[0].bbox.position; //kutunun x y si 
 
         tfScalar t_roll_change, t_pitch_change, t_yaw_change;
         t_yaw_change = (m_car_yaw - m_old_car_yaw);

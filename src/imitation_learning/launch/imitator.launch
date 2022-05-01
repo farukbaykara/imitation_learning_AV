@@ -1,5 +1,8 @@
 <launch>
 
+    <node name="republish" type="republish" pkg="image_transport" output="screen" 
+        args="compressed in:=/camera raw out:=/camera" />
+
     <node pkg="imitation_learning" type="imitator.py" name="imitator" output="screen">
         <rosparam command="load" file="$(find imitation_learning)/param/imitator.yaml" />
     </node>

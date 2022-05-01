@@ -35,7 +35,7 @@ model.summary()
 #9
 history = model.fit(batchGen(xTrain, yTrain, 100, 1), steps_per_epoch=20, epochs=3, validation_data = batchGen(xVal, yVal, 100, 0), validation_steps=200)
 
-model.save('model.h5')
+model.save("model.h5")
 print('Model Saved')
 
 plt.plot(history.history['loss'])
