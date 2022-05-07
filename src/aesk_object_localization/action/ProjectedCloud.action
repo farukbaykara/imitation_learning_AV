@@ -1,9 +1,0 @@
-#goal definition
-float64 x_max
-float64 y_max
----
-#result definition
-sensor_msgs/PointCloud2 cloud
----
-#feedback definition
-sensor_msgs/PointCloud2 cloud_feedback

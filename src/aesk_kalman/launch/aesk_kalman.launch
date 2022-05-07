@@ -3,16 +3,16 @@
 
     <param name="/use_sim_time" value="false" />
   
-    <node pkg="aesk_kalman" type="odom_trans_node" name="odom_trans_node" output="screen"></node>
+    <!-- <node pkg="aesk_kalman" type="odom_trans_node" name="odom_trans_node" output="screen"></node> -->
   
       
     <node pkg="aesk_kalman" type="tf_Odom" name="tf_Odom" output = "screen"></node>
 
-    <node pkg="tf" type="static_transform_publisher" name="gps_tf" args="0 0 0 0 0 0 1 imu gps 100"></node>
+    <!-- <node pkg="tf" type="static_transform_publisher" name="gps_tf" args="0 0 0 0 0 0 1 imu gps 100"></node> -->
 
     <!-- <node pkg="tf" type="static_transform_publisher" name="imu_tf" args="-1.0510799 0 -1.96 0 0 0 1 velodyne imu 100"></node> -->
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find aesk_kalman)/rviz/aesk_kalman_rviz.rviz" />
+    <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find aesk_kalman)/rviz/aesk_kalman_rviz.rviz" /> -->
   
   
     <include file="$(find nmea2fix)/launch/nmea2fix.launch"/>

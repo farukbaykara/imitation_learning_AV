@@ -35,24 +35,21 @@ void odomCallBack(const nav_msgs::Odometry::ConstPtr& msg)
     const geometry_msgs::Point pos_msg{msg->pose.pose.position};
     const geometry_msgs::Quaternion rot_msg{msg->pose.pose.orientation};
 
-    // transform_map.setOrigin( tf::Vector3((pos.x), (pos.y), (pos.z)) );
-    // transform_map.setRotation( tf::Quaternion(0, 0,0, 1) );
-    // br_odom.sendTransform(tf::StampedTransform(transform_map, clck, "map", "odom"));
+    transform_map.setOrigin( tf::Vector3((pos.x), (pos.y), (pos.z)) );
+    transform_map.setRotation( tf::Quaternion(0, 0,0, 1) );
+    br_odom.sendTransform(tf::StampedTransform(transform_map, clck, "map", "odom"));
 
-    // transform.setOrigin(tf::Vector3(pos_msg.x-pos.x,
-    //                                 pos_msg.y-pos.y,
-    //                                 pos_msg.z-pos.z));
+    transform.setOrigin(tf::Vector3(pos_msg.x-pos.x,
+                                    pos_msg.y-pos.y,
+                                    pos_msg.z-pos.z));
 
-    // transform.setRotation(tf::Quaternion(0, 0,0, 1));
-    // br_base.sendTransform(tf::StampedTransform(transform, clck, "odom", "base_link"));
+    transform.setRotation(tf::Quaternion(0, 0,0, 1));
+    br_base.sendTransform(tf::StampedTransform(transform, clck, "odom", "base_link"));
     
 
-    
-
-
-    // transform_gps.setOrigin( tf::Vector3(0, 0, 0) );
-    // transform_gps.setRotation( tf::Quaternion(0,0,0,1) );
-    // br_gps.sendTransform(tf::StampedTransform(transform_gps, clck, "base_link", "gps"));
+    transform_gps.setOrigin( tf::Vector3(0, 0, 0) );
+    transform_gps.setRotation( tf::Quaternion(0,0,0,1) );
+    br_gps.sendTransform(tf::StampedTransform(transform_gps, clck, "base_link", "base_scan"));
 
     // transform_imu.setOrigin( tf::Vector3(0, 0, 0) );
     // transform_imu.setRotation( tf::Quaternion(0,0,0,1) );

@@ -1,3 +1,0 @@
-lidar_topic: "/cloud_painter/cloud_projected"
-detection_2d_topic: "/darknet_republish/vision_boxes"
-# detection_2d_topic: "/yolov5/BoundingBoxes"
