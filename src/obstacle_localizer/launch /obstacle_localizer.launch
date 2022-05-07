@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="obstacle_localizer" type="obstacle_localizer" name="obstacle_localizer" output = "screen">
+
+    </node>
+    
+</launch>

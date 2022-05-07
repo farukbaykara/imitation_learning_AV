@@ -1,8 +1,0 @@
-#goal definition
-Header header
-geometry_msgs/Point[] control_points
----
-#result definition
-Header header
-geometry_msgs/Point[] path
----

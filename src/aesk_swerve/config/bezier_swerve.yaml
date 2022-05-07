@@ -1,8 +1,0 @@
-obstacle_topic: "/simulator/ground_truth/3d_detections"
-output_topic: "/swerve_waypoints"
-path_marker_topic: "/swerve_markers/path"
-point_marker_topic: "/swerve_markers/bezier_control_points"
-odom_topic: "/odom"
-obstacle_dist: 15.0
-offset: 6
-visualization_method: "all" # "all", "points" or "path" to visualize certain points.

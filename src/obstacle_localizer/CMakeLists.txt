@@ -1,23 +1,17 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(aesk_swerve)
+project(obstacle_localizer)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-add_compile_options(-Wall -Wextra)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
   roscpp
   rospy
   std_msgs
-  geometry_msgs
-  lgsvl_msgs
-  actionlib_msgs
-  visualization_msgs
-  actionlib)
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -67,18 +61,17 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate actions in the 'action' folder
- add_action_files(
-   DIRECTORY action	
-   FILES Bezier.action
- )
+# add_action_files(
+#   FILES
+#   Action1.action
+#   Action2.action
+# )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs
-   geometry_msgs
-   actionlib_msgs
- )
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -110,9 +103,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES aesk_swerve
-  CATKIN_DEPENDS actionlib_msgs
+  INCLUDE_DIRS include
+  LIBRARIES obstacle_localizer
+  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -124,12 +117,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
-${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/aesk_swerve.cpp
+#   src/${PROJECT_NAME}/obstacle_localizer.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -140,7 +133,7 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/aesk_swerve_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/obstacle_localizer_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -204,7 +197,7 @@ ${catkin_INCLUDE_DIRS}
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_aesk_swerve.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_obstacle_localizer.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -212,8 +205,34 @@ ${catkin_INCLUDE_DIRS}
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_library(bezier_swerve_lib src/Bezier_Swerve/bezier_swerve.cpp)
+# ## Declare a cpp library
+# add_library(obstacleLocalizerLib
+#         src/obstacle_localizer_node.cpp
+#         )
+# target_compile_features(obstacleLocalizerLib INTERFACE cxx_std_11)
 
-add_executable(bezier_swerve_main src/Bezier_Swerve/bezier_swerve_main.cpp)
-add_dependencies(bezier_swerve_main ${catkin_EXPORTED_TARGETS})
-target_link_libraries(bezier_swerve_main bezier_swerve_lib ${catkin_LIBRARIES})
+# ## Declare cpp executables
+# add_executable(obstacleLocalizerNode
+#         src/obstacle_localizer.cpp
+#         src/obstacle_localizer_node.cpp
+#         )
+
+# target_compile_features(obstacleLocalizerNode INTERFACE cxx_std_11)
+
+# ## Add dependencies to exported targets, like ROS msgs or srvs
+# add_dependencies(obstacleLocalizerLib
+#         ${catkin_EXPORTED_TARGETS}
+#         )
+
+# add_dependencies(obstacleLocalizerNode
+#         ${catkin_EXPORTED_TARGETS}
+#         )
+
+# target_link_libraries(obstacleLocalizerLib ${catkin_LIBRARIES})
+# target_link_libraries(obstacleLocalizerNode ${catkin_LIBRARIES})
+
+add_library(obstacle_localizer_node src/obstacle_localizer_node.cpp)
+
+add_executable(obstacle_localizer src/obstacle_localizer.cpp)
+add_dependencies(obstacle_localizer ${catkin_EXPORTED_TARGETS})
+target_link_libraries(obstacle_localizer obstacle_localizer_node ${catkin_LIBRARIES})
