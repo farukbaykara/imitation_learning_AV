@@ -58,5 +58,5 @@
   
   <node pkg="obstacle_detector" type="obstacle_visualizer" name="obstacle_visualizer" output="screen"/>
   
-  <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find obstacle_detector)/resources/obstacle_detector.rviz"/>
+  <!-- <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find obstacle_detector)/resources/obstacle_detector.rviz"/> -->
 </launch>

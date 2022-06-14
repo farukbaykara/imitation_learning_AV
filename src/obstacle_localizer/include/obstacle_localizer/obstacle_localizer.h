@@ -2,11 +2,11 @@
 
 #include <ros/ros.h>
 
-
+#include <iostream>
 #include <tf/tf.h>
 #include <math.h>
 #include <tf/LinearMath/Scalar.h>
-
+#include <vector>
 
 #include "nav_msgs/Path.h"
 #include "nav_msgs/Odometry.h"
@@ -15,12 +15,11 @@
 #include "visualization_msgs/Marker.h"
 #include "visualization_msgs/MarkerArray.h"
 #include "std_msgs/Bool.h"
+#include "std_msgs/Float32.h"
+#include "geometry_msgs/PointStamped.h"
 
 namespace obstacle_localizer
 {
-
-
-
     class Car
     {
 
@@ -36,13 +35,13 @@ namespace obstacle_localizer
          * Obstacle callback method.
          * @param t_Obstacle the received message.
          */
-        void obstacleMarkerCallback(const visualization_msgs::MarkerArray &t_obstacleMarker_msg);
+        void obstacleMarkerCallback(const visualization_msgs::MarkerArray::ConstPtr &t_obstacleMarker_msg);
 
         /*!
-         * Obstacle callback method.
+         * Localized Obstacle publisher method.
          * @param t_Obstacle the received message.
          */
-        void obstaclePublisher();
+        void obstaclePublisher(float t_pose_x ,float t_pose_y);
 
         //! ROS node handle.
         ros::NodeHandle &m_node_handle;
@@ -52,6 +51,12 @@ namespace obstacle_localizer
 
         //! ROS topic publisher.
         ros::Publisher m_obstacle_pub;
+
+        //! Incoming marker array points.
+        std::vector<visualization_msgs::MarkerArray> m_incoming_obstacleArray;
+        
+        //! Incoming marker array size.
+        geometry_msgs::PoseStamped m_obstaclePose;
     };
 
 } /* obstacle_localizer namespace */

@@ -1,7 +1,21 @@
 <launch>
 
-    <node pkg="obstacle_localizer" type="obstacle_localizer" name="obstacle_localizer" output = "screen">
 
-    </node>
+
+
+
+
+
     
+
+
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_empty_world.launch">
+
+    </include>
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find obstacle_detector)/resources/obstacle_detector.rviz" />
+    <include file="$(find obstacle_detector)/launch/single_scanner.launch" />
+
+    <node pkg="obstacle_localizer" type="obstacle_localizer" name="obstacle_localizer" output = "screen"/>
+
 </launch>
