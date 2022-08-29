@@ -7,3 +7,11 @@
 [submodule "src/obstacle_detector"]
 	path = src/obstacle_detector
 	url = https://github.com/yangfuyuan/obstacle_detector
+[submodule "rplidar_ros"]
+	path = rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros
+	branch = master
+[submodule "zed-ros-wrapper"]
+	path = zed-ros-wrapper
+	url = https://github.com/stereolabs/zed-ros-wrapper
+	branch = master
