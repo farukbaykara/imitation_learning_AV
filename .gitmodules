@@ -15,3 +15,11 @@
 	path = zed-ros-wrapper
 	url = https://github.com/stereolabs/zed-ros-wrapper
 	branch = master
+[submodule "src/rplidar_ros"]
+	path = src/rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros
+	branch = master
+[submodule "src/zed-ros-wrapper"]
+	path = src/zed-ros-wrapper
+	url = https://github.com/stereolabs/zed-ros-wrapper
+	branch = master
