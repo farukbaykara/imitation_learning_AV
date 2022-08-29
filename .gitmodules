@@ -23,3 +23,7 @@
 	path = src/zed-ros-wrapper
 	url = https://github.com/stereolabs/zed-ros-wrapper
 	branch = master
+[submodule "src/razor_imu_9dof"]
+	path = src/razor_imu_9dof
+	url = https://github.com/ENSTABretagneRobotics/razor_imu_9dof
+	branch = master
