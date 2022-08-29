@@ -8,3 +8,4 @@ Pure Pursuit is used as control method.
 
 All packages created using ROS1 middleware and implemented in SVL simulator. 
 
+roslaunch zed_wrapper zedm.launch
