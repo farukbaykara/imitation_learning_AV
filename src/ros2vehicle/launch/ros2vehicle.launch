@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="ros2vehicle" type="ros2vehicle.py" name="ros2can"/>
+
+</launch>

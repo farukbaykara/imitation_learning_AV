@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(aesk_kalman)
+project(lane_finder)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,15 +8,9 @@ project(aesk_kalman)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  nav_msgs
-  sensor_msgs
   roscpp
   rospy
   std_msgs
-  tf
-  tf2
-  tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -76,7 +70,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   nav_msgs#   std_msgs
+#   std_msgs
 # )
 
 ################################################
@@ -110,8 +104,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES aesk_kalman
-#  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs tf tf2
+#  LIBRARIES lane_finder
+#  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -128,7 +122,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/aesk_kalman.cpp
+#   src/${PROJECT_NAME}/lane_finder.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -139,7 +133,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/aesk_kalman_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/lane_finder_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -203,17 +197,10 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_aesk_kalman.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_lane_finder.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-add_executable(odom_trans_node src/odom_trans_node.cpp)
-target_link_libraries(odom_trans_node  ${catkin_LIBRARIES})
-
-add_executable(tf_Odom src/tf_Odom.cpp)
-add_dependencies(tf_Odom ${catkin_EXPORTED_TARGETS})
-target_link_libraries(tf_Odom  ${catkin_LIBRARIES})

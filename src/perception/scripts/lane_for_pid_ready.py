@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import cv2
@@ -22,6 +22,7 @@ from sim_test import *
 
 
 
+
 def imageInfoCallback(data,waypoint_pub):
 
     np_arr = np.fromstring(data.data, np.uint8)
@@ -31,22 +32,57 @@ def imageInfoCallback(data,waypoint_pub):
     left_lane_points, right_lane_points = get_lane_points(processed_img)
 
 
+    # for i in range(len(left_lane_points)):
+    #     print(left_lane_points.x)
+
+    wp = wp_message()
+    wp.waypoint_sol_x = left_lane_points[3][0]
+    wp.waypoint_sol_y = left_lane_points[3][1]
+    wp.waypoint_sag_x = right_lane_points[3][0]
+    wp.waypoint_sag_y = right_lane_points[3][1]
+
+    mid_path_x = (wp.waypoint_sol_x + wp.waypoint_sag_x)/2
+    mid_path_y = (wp.waypoint_sol_y+wp.waypoint_sag_y)/2
+
+
+
     for i in range(len(left_lane_points)):
-        cv2.circle(processed_img, left_lane_points[i], 5, (255, 255, 0), 3)
-        cv2.circle(processed_img, right_lane_points[i], 5, (255, 0, 255), 3)
+        # cv2.circle(processed_img, left_lane_points[i], 5, (255, 255, 0), 3)
+        # cv2.circle(processed_img, right_lane_points[i], 5, (255, 0, 255), 3)
+        cv2.circle(processed_img, (int(wp.waypoint_sol_x),int(wp.waypoint_sol_y)), 5, (255, 160, 255), 3)
+        cv2.circle(processed_img, (int(wp.waypoint_sag_x),int(wp.waypoint_sag_y)), 5, (255, 160, 255), 3)
+        
+        cv2.circle(processed_img, (int(mid_path_x),int(mid_path_y)), 5, (255, 160, 255), 3)
+
+        # mid_path_x = (left_lane_points[i][0] + right_lane_points[i][0])/2
+        # mid_path_y = (left_lane_points[i][1] + right_lane_points[i][1])/2
+        
+        # mid_path_arr_x.append(mid_path_x)
+        # mid_path_arr_y.append(mid_path_y)
+
+        #cv2.circle(processed_img, (int(mid_path_x[i]),int(mid_path_y[i])), 5, (255, 160, 255), 3)
+
+        #cv2.circle(processed_img, wp.waypoint_sol_y, 5, (255, 0, 255), 3)
+        
+
+
+
+    # print(mid_path_arr_x)
+    # print(mid_path_arr_y)
+
+    
     cv2.imshow("image", processed_img)
     cv2.waitKey(1)
 
+    wp_final = wp_message()
+    wp_final.waypoint_sol_x = mid_path_x
+    wp_final.waypoint_sol_y = mid_path_y
 
 
-    wp = wp_message()
-    wp.waypoint_sol_x = left_lane_points[0][0]
-    wp.waypoint_sag_x = right_lane_points[0][0]
+    waypoint_pub.publish(wp_final)
 
-    waypoint_pub.publish(wp)
-
-    print(wp.waypoint_sol_x)
-    print(wp.waypoint_sag_x)
+    #print(wp.waypoint_sol_x)
+    #print(wp.waypoint_sag_x)
 
 
 def cameraInfoListener():
@@ -54,13 +90,13 @@ def cameraInfoListener():
     rospy.init_node('image_subscriber', anonymous=False)
 
     rospy.loginfo('Waiting for topic %s to be published..','simulator/middle_camera/image/compressed')
-    rospy.wait_for_message('/camera/compressed',CompressedImage)
+    rospy.wait_for_message('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed',CompressedImage)
     rospy.loginfo('%s topic is now available!','simulator/middle_camera/image/compressed')
 
     waypoint_publisher = rospy.Publisher('waypoint_topic', wp_message, queue_size=10 )
 
 
-    rospy.Subscriber('/camera/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
+    rospy.Subscriber('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

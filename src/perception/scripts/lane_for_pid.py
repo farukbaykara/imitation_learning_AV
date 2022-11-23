@@ -159,13 +159,13 @@ def cameraInfoListener():
     rospy.init_node('image_subscriber', anonymous=False)
 
     rospy.loginfo('Waiting for topic %s to be published..','simulator/middle_camera/image/compressed')
-    rospy.wait_for_message('/camera/compressed',CompressedImage)
+    rospy.wait_for_message('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed',CompressedImage)
     rospy.loginfo('%s topic is now available!','simulator/middle_camera/image/compressed')
 
     waypoint_publisher = rospy.Publisher('waypoint_topic', wp_message, queue_size=10 )
 
 
-    rospy.Subscriber('/camera', CompressedImage, imageInfoCallback, waypoint_publisher)
+    rospy.Subscriber('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

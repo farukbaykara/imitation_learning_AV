@@ -31,8 +31,8 @@ def imageInfoCallback(data, waypoint_pub):
 
     waypoint_pub.publish(wp)
 
-    print(waypoint_sol_x)
-    print(waypoint_sag_y)
+    print(wp.waypoint_sol_x)
+    print(wp.waypoint_sag_y)
 
     # cv2.imshow("image", processed_image)
     # cv2.waitKey(1)

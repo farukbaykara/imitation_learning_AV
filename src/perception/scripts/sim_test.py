@@ -139,6 +139,6 @@ def get_lane_points(gray_image):
     # cv2.waitKey()
 
     # resized_img[450:600, :] = img
-    print(left_lane_points)
+    #print(left_lane_points)
 
     return left_lane_points, right_lane_points

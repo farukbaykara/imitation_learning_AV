@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import rospy
@@ -134,7 +134,7 @@ def listener():
     
     rospy.init_node('slope_calculator', anonymous=True)
     rate=rospy.Rate(1)
-    image_sub = rospy.Subscriber("/camera/comressed" ,Image, callback)
+    image_sub = rospy.Subscriber("/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed" ,Image, callback)
     slope_pub = rospy.Publisher('slope_topic', Float64, queue_size=1)
     
    
