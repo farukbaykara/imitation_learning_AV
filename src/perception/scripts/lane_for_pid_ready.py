@@ -8,6 +8,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from perception.msg import waypoints as wp_message
 
+from geometry_msgs.msg import PoseStamped
+
 import pickle, pprint
 import os
 import matplotlib.pyplot as plt
@@ -40,6 +42,10 @@ def imageInfoCallback(data,waypoint_pub):
     wp.waypoint_sol_y = left_lane_points[3][1]
     wp.waypoint_sag_x = right_lane_points[3][0]
     wp.waypoint_sag_y = right_lane_points[3][1]
+
+    # print(wp.waypoint_sol_x)
+    # print(wp.waypoint_sag_x)
+    
 
     mid_path_x = (wp.waypoint_sol_x + wp.waypoint_sag_x)/2
     mid_path_y = (wp.waypoint_sol_y+wp.waypoint_sag_y)/2
@@ -79,7 +85,14 @@ def imageInfoCallback(data,waypoint_pub):
     wp_final.waypoint_sol_y = mid_path_y
 
 
-    waypoint_pub.publish(wp_final)
+    wp_pose = PoseStamped()
+    wp_pose.pose.position.x = mid_path_x
+    wp_pose.pose.position.y = mid_path_y
+
+
+
+
+    waypoint_pub.publish(wp_pose)
 
     #print(wp.waypoint_sol_x)
     #print(wp.waypoint_sag_x)
@@ -90,13 +103,13 @@ def cameraInfoListener():
     rospy.init_node('image_subscriber', anonymous=False)
 
     rospy.loginfo('Waiting for topic %s to be published..','simulator/middle_camera/image/compressed')
-    rospy.wait_for_message('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed',CompressedImage)
+    rospy.wait_for_message('/usb_cam/image_raw/compressed',CompressedImage)
     rospy.loginfo('%s topic is now available!','simulator/middle_camera/image/compressed')
 
-    waypoint_publisher = rospy.Publisher('waypoint_topic', wp_message, queue_size=10 )
+    waypoint_publisher = rospy.Publisher('waypoint_topic', PoseStamped, queue_size=10 )
 
 
-    rospy.Subscriber('/spinnaker_ros_driver_node/cam_fm_01/image_raw/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
+    rospy.Subscriber('/usb_cam/image_raw/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

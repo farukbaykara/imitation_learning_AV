@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from pickle import FALSE
 import numpy as np
@@ -22,20 +22,20 @@ def data_sender(data):
     
     
 
-    if steer > 1750:
-            steer = 1750     
-    if steer < 0:
-            steer = 0
+    # if steer > 1750:
+    #         steer = 1750     
+    # if steer < 0:
+    #         steer = 0
     
 
     direction = steer # 0-810 arasi
     Set_Speed = velocity # m/s
     
-    Set_Speed_int8 = np.uint8(Set_Speed*10)
+    Set_Speed_uint8 = np.uint8(Set_Speed)
     direction_L = np.uint32(direction) & 0xFF
     direction_H = (np.uint32(direction) >> 8) & 0xFF
 
-    cw = [31,21,85,170,160,Set_Speed_int8,direction_L , direction_H,16,16,16,16,16]
+    cw = [1,2,Set_Speed_uint8,direction_L , direction_H]
     ser.write(serial.to_bytes(cw))
     
     ser.close()

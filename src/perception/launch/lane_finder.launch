@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="perception" type="lane_for_pid_ready.py" name="lane_finder" output="screen"/>
+
+    <node pkg="perception" type="pid_control.py" name="pid_controller" output="screen"/>
+</launch>

@@ -1,5 +1,14 @@
 <launch>
 
-    <node pkg="ros2vehicle" type="ros2vehicle.py" name="ros2can"/>
+
+    <include file="$(find usb_cam)/launch/usb_cam-test.launch"/>
+
+    <include file="$(find perception)/launch/lane_finder.launch"/>
+    
+    <node pkg="ros2vehicle" type="ros2vehicle.py" name="ros2can" output="screen"/>
+
+    
+
+
 
 </launch>
