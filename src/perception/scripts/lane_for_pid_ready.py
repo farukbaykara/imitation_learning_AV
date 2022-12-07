@@ -102,14 +102,14 @@ def cameraInfoListener():
 
     rospy.init_node('image_subscriber', anonymous=False)
 
-    rospy.loginfo('Waiting for topic %s to be published..','simulator/middle_camera/image/compressed')
-    rospy.wait_for_message('/usb_cam/image_raw/compressed',CompressedImage)
+    rospy.loginfo('Waiting for topic %s to be published..','/zed/zed_node/left_raw/image_raw_color/compressed')
+    rospy.wait_for_message('/zed/zed_node/left_raw/image_raw_color/compressed',CompressedImage)
     rospy.loginfo('%s topic is now available!','simulator/middle_camera/image/compressed')
 
     waypoint_publisher = rospy.Publisher('waypoint_topic', PoseStamped, queue_size=10 )
 
 
-    rospy.Subscriber('/usb_cam/image_raw/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
+    rospy.Subscriber('/zed/zed_node/left_raw/image_raw_color/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
