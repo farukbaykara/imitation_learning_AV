@@ -66,8 +66,9 @@ class Controller:
 
         steer_msg = Twist()
 
+        self.set_speed = 1
 
-        steer_msg.linear.x = 1
+        steer_msg.linear.x = self.set_speed
         steer_msg.angular.z = steer
 
         self.vehicle_cmd_pub.publish(steer_msg)
@@ -77,7 +78,8 @@ class Controller:
         # pos.x will be followed
 
 
-
+    def __del__(self):
+        self.set_speed = 0
 
 if __name__ == '__main__':
 
