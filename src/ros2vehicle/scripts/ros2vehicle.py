@@ -30,14 +30,14 @@ def data_sender(data):
 
     set_steer = 100*steer # 0-810 arasi
     Set_Speed = velocity # m/s
-    
+    set_direction = 0
     Set_Speed_uint8 = np.uint8(Set_Speed)
     #direction_L = np.uint32(direction) & 0xFF
     #direction_H = (np.uint32(direction) >> 8) & 0xFF
-    if(set_steer > 100):
-        set_steer = 100
-    elif(set_steer<-100):
-        set_steer = -100
+    if(set_steer > 90):
+        set_steer = 90
+    elif(set_steer<-90):
+        set_steer = -90
 
 
 
