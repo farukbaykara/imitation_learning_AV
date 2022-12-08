@@ -34,6 +34,12 @@ def data_sender(data):
     Set_Speed_uint8 = np.uint8(Set_Speed)
     #direction_L = np.uint32(direction) & 0xFF
     #direction_H = (np.uint32(direction) >> 8) & 0xFF
+    if(set_steer > 1):
+        set_direction = 1
+    elif(set_steer<-1):
+        set_steer = -1
+
+
 
     if(set_steer > 0):
         set_direction = 1
