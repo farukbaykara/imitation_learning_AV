@@ -28,19 +28,28 @@ def data_sender(data):
     #         steer = 0
     
 
-    direction = steer # 0-810 arasi
+    set_steer = 100*steer # 0-810 arasi
     Set_Speed = velocity # m/s
     
     Set_Speed_uint8 = np.uint8(Set_Speed)
-    direction_L = np.uint32(direction) & 0xFF
-    direction_H = (np.uint32(direction) >> 8) & 0xFF
+    #direction_L = np.uint32(direction) & 0xFF
+    #direction_H = (np.uint32(direction) >> 8) & 0xFF
 
-    cw = [1,2,Set_Speed_uint8,direction_L , direction_H]
+    if(set_steer > 0):
+        set_direction = 1
+        set_steer
+    elif(set_steer<0):
+        set_direction = 0
+        set_steer = set_steer * -1
+
+
+    print("speed:"+ Set_Speed_uint8)
+    print("steering:"+ set_steer)
+    print("direction:"+ set_direction)
+    
+    cw = [171,172,Set_Speed_uint8, set_steer, set_direction]
     ser.write(serial.to_bytes(cw))
     
-    ser.close()
-    ser.open()
-
 
     #print("angle: ", direction, "    speed: ", velocity,)
 

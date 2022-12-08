@@ -18,7 +18,7 @@ class Controller:
         self.integ_limMin = -5
 
         self.vehicle_cmd_pub = rospy.Publisher("/vehicle_cmd", Twist, queue_size=10)
-        self.wp_sub = rospy.Subscriber('/waypoint_topic', PoseStamped,
+        self.wp_sub = rospy.Subscriber('/waypoint_topic_2d', PoseStamped,
                         self.waypointCallback)
 
 

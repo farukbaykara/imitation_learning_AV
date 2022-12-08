@@ -106,7 +106,7 @@ def cameraInfoListener():
     rospy.wait_for_message('/zed/zed_node/left_raw/image_raw_color/compressed',CompressedImage)
     rospy.loginfo('%s topic is now available!','simulator/middle_camera/image/compressed')
 
-    waypoint_publisher = rospy.Publisher('waypoint_topic', PoseStamped, queue_size=10 )
+    waypoint_publisher = rospy.Publisher('waypoint_topic_2d', PoseStamped, queue_size=10 )
 
 
     rospy.Subscriber('/zed/zed_node/left_raw/image_raw_color/compressed', CompressedImage, imageInfoCallback, waypoint_publisher)
