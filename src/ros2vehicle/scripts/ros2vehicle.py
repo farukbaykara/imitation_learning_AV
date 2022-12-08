@@ -11,7 +11,7 @@ import time
 
 def data_sender(data):
     
-    ser = serial.Serial(port='/dev/ttyACM0',baudrate=9600,stopbits=1,bytesize=8)#veriyi bastigimiz seri port
+    ser = serial.Serial(port='/dev/ttyUSB0',baudrate=115200,stopbits=1,bytesize=8)#veriyi bastigimiz seri port
     
     velocity        = data.linear.x 
     steer           = data.angular.z 
@@ -34,26 +34,26 @@ def data_sender(data):
     Set_Speed_uint8 = np.uint8(Set_Speed)
     #direction_L = np.uint32(direction) & 0xFF
     #direction_H = (np.uint32(direction) >> 8) & 0xFF
-    if(set_steer > 1):
-        set_direction = 1
-    elif(set_steer<-1):
-        set_steer = -1
+    if(set_steer > 100):
+        set_steer = 100
+    elif(set_steer<-100):
+        set_steer = -100
 
 
 
     if(set_steer > 0):
         set_direction = 1
-        set_steer
+        
     elif(set_steer<0):
         set_direction = 0
         set_steer = set_steer * -1
 
 
-    print("speed:"+ Set_Speed_uint8)
-    print("steering:"+ set_steer)
-    print("direction:"+ set_direction)
+    print("speed:",str(Set_Speed_uint8))
+    print("steering:",str(set_steer))
+    print("direction:", str(set_direction))
     
-    cw = [171,172,Set_Speed_uint8, set_steer, set_direction]
+    cw = [171,172,Set_Speed_uint8, np.uint8(set_steer), np.uint8(set_direction)]
     ser.write(serial.to_bytes(cw))
     
 
