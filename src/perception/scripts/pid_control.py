@@ -16,6 +16,7 @@ class Controller:
         self.steer_limMin = -3
         self.integ_limMax = 5
         self.integ_limMin = -5
+        self.set_speed = 0
 
         self.vehicle_cmd_pub = rospy.Publisher("/vehicle_cmd", Twist, queue_size=10)
         self.wp_sub = rospy.Subscriber('/waypoint_topic_2d', PoseStamped,
@@ -32,7 +33,7 @@ class Controller:
         # print(ref_point.pose.position.y)
 
         kp = 0.1
-        ki = 0.01
+        ki = 0.1
         kd = 0.0
 
         car_pos = ref_point.pose.position.x/1250
@@ -64,6 +65,7 @@ class Controller:
             steer = self.steer_limMin
 
         steer_msg = Twist()
+
 
         steer_msg.linear.x = 1
         steer_msg.angular.z = steer
