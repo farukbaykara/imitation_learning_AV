@@ -27,7 +27,7 @@
  *
  */
 
-#include "AsyncSerial.h"
+#include "vehicle2ros/AsyncSerial.h"
 
 #include <string>
 #include <algorithm>

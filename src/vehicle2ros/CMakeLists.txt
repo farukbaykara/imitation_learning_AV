@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  lgsvl_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,9 +104,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES vehicle2ros
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+  INCLUDE_DIRS include
+  LIBRARIES vehicle2ros
+  CATKIN_DEPENDS roscpp rospy std_msgs lgsvl_msgs
 #  DEPENDS system_lib
 )
 
@@ -116,7 +117,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -204,3 +205,43 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_library(AsyncSerial
+        src/AsyncSerial.cpp
+        )
+target_compile_features(AsyncSerial INTERFACE cxx_std_11)
+add_dependencies(AsyncSerial ${catkin_EXPORTED_TARGETS})
+target_link_libraries(AsyncSerial ${catkin_LIBRARIES})
+
+
+
+add_library(vehicle2roslib
+        src/vehicle2ros.cpp
+        )
+target_compile_features(vehicle2roslib INTERFACE cxx_std_11)
+
+## Declare cpp executables
+add_executable(vehicle2ros_main
+        src/vehicle2ros.cpp
+        src/vehicle2ros_node.cpp
+        )
+target_compile_features(vehicle2ros_main INTERFACE cxx_std_11)
+
+## Add dependencies to exported targets, like ROS msgs or srvs
+add_dependencies(vehicle2roslib
+        ${catkin_EXPORTED_TARGETS}
+        )
+
+add_dependencies(vehicle2ros_main
+        ${catkin_EXPORTED_TARGETS}
+        )
+
+## Specify libraries to link executable targets against
+target_link_libraries(vehicle2roslib
+        ${catkin_LIBRARIES}
+        AsyncSerial       
+        )
+
+target_link_libraries(vehicle2ros_main
+        vehicle2roslib
+        ${catkin_LIBRARIES}
+        )
