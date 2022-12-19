@@ -30,9 +30,6 @@ namespace car
             struct VCU_data
             {
                 uint8_t autonomous_mode;
-                uint32_t steering;
-                uint32_t throttle;
-                uint32_t brake;
 
             } vcu_data;
         };

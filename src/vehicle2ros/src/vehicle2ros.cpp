@@ -33,6 +33,9 @@ namespace car
 
         unpack_data(data, len);
 
+        vehicle_data.engine_active = received_data.vehicle_active;
+
+
         vehicle_data_pub.publish(vehicle_data);
     }
     void Car::unpack_data(const char *data, unsigned int len)
@@ -52,8 +55,6 @@ namespace car
                 // Pack ID : x15550000
 
                 received_data.vehicle_active = frame_ptr->veriler.vcu_data.autonomous_mode;
-                received_data.speed = frame_ptr->veriler.vcu_data.throttle;
-                received_data.steer_pct = frame_ptr->veriler.vcu_data.steering;
 
                 receive_buffer_.erase(receive_buffer_.begin(),
                                       receive_buffer_.begin() +
