@@ -2,8 +2,13 @@
 
 
 
-    <node pkg="bag2csv" type="bag2csv.py" name="bag2csv">
+    <!-- <node pkg="bag2csv" type="bag2csv.py" name="bag2csv">
+        <rosparam command="load" file="$(find bag2csv)/config/default.yml" />
+    </node> -->
+    
+
+    <node pkg="bag2csv" type="msg_modifier.py" name="msg_modifier" output="screen">
         <rosparam command="load" file="$(find bag2csv)/config/default.yml" />
     </node>
-    
+
 </launch>

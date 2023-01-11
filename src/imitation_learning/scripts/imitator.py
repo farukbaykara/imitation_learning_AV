@@ -1,9 +1,20 @@
 #! /usr/bin/env python3
 
-from TestModel import *
+
+print('Setting UP')
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+import numpy as np
+
+from tensorflow.python.keras.models import load_model
+import base64
+from io import BytesIO
+from PIL import Image
+import cv2
+
 
 from utlis import *
-from tensorflow.python.keras.models import load_model
 
 
 
@@ -23,7 +34,7 @@ class Car():
 
         rospy.Subscriber(rospy.get_param('~image_topic'),Image,self.imageCallback,queue_size=1)
         
-        self.cmdPublisher = rospy.Publisher('/vehicle_cmd',VehicleCmd,queue_size=10)
+        self.cmdPublisher = rospy.Publisher('/vehicle_cmd_',VehicleCmd,queue_size=10)
 
 
 

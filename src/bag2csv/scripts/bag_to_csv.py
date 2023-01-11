@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 from io import StringIO
 import string
@@ -24,14 +24,14 @@ class Main():
         self.cv_image = None
         self.raw_canbus = CanBusData()
         self.raw_canbus = None
-        self.csv_name = rospy.get_param('~csv_name')
-        self.csv_dir = rospy.get_param('~csv_dir')
+        self.csv_name = 'driving_log.csv'
+        self.csv_dir = '/home/aydin/data/'
         self.csv_full_path = self.csv_dir+self.csv_name
-        self.bagfile_name = rospy.get_param('~bagfile_name')
-        self.camera_topic = rospy.get_param('~camera_topic')
-        self.CanBus_topic = rospy.get_param('~CanBus_topic')
-        self.add_or_new = rospy.get_param('~add_or_new')
-        
+        self.bagfile_name = 'data2'
+        self.camera_topic = '/zed/zed_node/left_raw/image_raw_color'
+        self.CanBus_topic ='/joy_modified'
+        self.add_or_new = 'new'
+        self.image_path = '/home/aydin/data/IMG'
         self.bridge = CvBridge()
 
 
@@ -57,7 +57,9 @@ class Main():
         self.raw_image = raw_image
         self.raw_canbus = raw_canbus
 
-        self.cv_image = self.bridge.imgmsg_to_cv2(self.raw_image,desired_encoding='passthrough')
+        self.cv_image = self.bridge.imgmsg_to_cv2(raw_image, "bgr8")
+
+        #self.cv_image = self.bridge.imgmsg_to_cv2(self.raw_image,desired_encoding='passthrough')
     
     def save_data(self):
         
@@ -65,7 +67,7 @@ class Main():
             return
         
         print('-------------------'+str(self.counter))
-        image_path = rospy.get_param('~image_output_path')+self.bagfile_name+'_'+str(self.counter).zfill(7)+'.jpg'
+        image_path = self.image_path+self.bagfile_name+'_'+str(self.counter).zfill(7)+'.jpg'
         
         cv2.imwrite(image_path, img=self.cv_image)
         self.counter+=1

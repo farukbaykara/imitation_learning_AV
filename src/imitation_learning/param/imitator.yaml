@@ -1,4 +1,4 @@
 image_path: 'home/baykara/MST/IMG/'
 image_folder_name: 'IMG'
-model_name: '/home/aesk/baykara_ws/imitation_learning_AV/src/imitation_learning/scripts/model.h5'
-image_topic: '/camera'
+model_name: '/home/aydin/imitation_learning_AV/src/imitation_learning/scripts/model.h5'
+image_topic: '/zed/zed_node/left_raw/image_raw_color'

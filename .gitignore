@@ -5,3 +5,5 @@ build/
 .catkin_workspace
 .vscode
 *.bag
+install/
+.catkin_tools/

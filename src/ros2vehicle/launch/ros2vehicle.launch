@@ -7,7 +7,7 @@
     
     <!-- <include file="$(find vehicle2ros)/launch/vehicle2ros.launch"/> -->
     
-    
+    <include file="$(find imitation_learning)/launch/imitator.launch"/>
     
     <node pkg="ros2vehicle" type="ros2vehicle.py" name="ros2can" output="screen"/>
     <node pkg="ros2vehicle" type="joystick_control.py" name="joy2vehicle" output="screen"/>
