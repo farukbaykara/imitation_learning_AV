@@ -13,3 +13,7 @@ roslaunch zed_wrapper zedm.launch
 roslaunch rplidar_ros rplidar.launch
 
 
+'''
+asdfasdfas
+'''
+
