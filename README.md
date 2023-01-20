@@ -12,8 +12,21 @@ roslaunch zed_wrapper zedm.launch
 
 roslaunch rplidar_ros rplidar.launch
 
+## Starting Vehicle
 
-'''
-asdfasdfas
-'''
+Go to your /home directory to install repo in it. It is important to be in **/home** directory.
+
+```
+cd /home
+cd /imitation_learning_AV
+source /devel/setup.bash
+```
+ Connect ZED camera and IMU to the Jetson TX2 and run below commands. 
+
+
+```
+sudo chmod 777 /dev/ttyUSB0
+roslaunch ros2vehicle ros2vehicle.launch
+```
+
 
